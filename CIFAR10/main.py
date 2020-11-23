@@ -91,7 +91,7 @@ def main():
 
     print('=> loading cifar10 data...')
     normalize = transforms.Normalize(mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262])
-    train_dataset = torchvision.datasets.CIFAR10(
+    train_dataset = torchvision.datasets.MNIST(
         root='./data',
         train=True,
         download=True,
@@ -103,7 +103,7 @@ def main():
         ]))
     trainloader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
-    test_dataset = torchvision.datasets.CIFAR10(
+    test_dataset = torchvision.datasets.MNIST(
         root='./data',
         train=False,
         download=True,
