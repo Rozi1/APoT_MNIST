@@ -91,26 +91,19 @@ def main():
 
     print('=> loading cifar10 data...')
     normalize = transforms.Normalize(mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262])
+    transform = transforms.ToTensor()
     train_dataset = torchvision.datasets.MNIST(
         root='./data',
         train=True,
         download=True,
-        transform=transforms.Compose([
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            normalize,
-        ]))
+        transform=transform)
     trainloader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
     test_dataset = torchvision.datasets.MNIST(
         root='./data',
         train=False,
         download=True,
-        transform=transforms.Compose([
-            transforms.ToTensor(),
-            normalize,
-        ]))
+        transform=transform)
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=2)
 
     if args.evaluate:
