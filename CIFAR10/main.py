@@ -2,19 +2,17 @@ import argparse
 import os
 import time
 import shutil
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
-import matplotlib.pyplot as plt
 from tensorboardX import SummaryWriter
-
 import torchvision
 import torchvision.transforms as transforms
-
 from models import *
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 %matplotlib inline
 parser = argparse.ArgumentParser(description='PyTorch Cifar10 Training')
 parser.add_argument('--epochs', default=5, type=int, metavar='N', help='number of total epochs to run')
