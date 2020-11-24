@@ -18,7 +18,7 @@ from models import *
 
 parser = argparse.ArgumentParser(description='PyTorch Cifar10 Training')
 parser.add_argument('--epochs', default=300, type=int, metavar='N', help='number of total epochs to run')
-parser.add_argument('-a', '--arch', metavar='ARCH', default='res20')
+parser.add_argument('-a', '--arch', metavar='ARCH', default='res50')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N', help='manual epoch number (useful on restarts)')
 parser.add_argument('-b', '--batch-size', default=128, type=int, metavar='N', help='mini-batch size (default: 128),only used for train')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float, metavar='LR', help='initial learning rate')
@@ -44,8 +44,8 @@ def main():
     model=None
     if use_gpu:
         float = True if args.bit == 32 else False
-        if args.arch == 'res20':
-            model = resnet20_cifar(float=float)
+        if args.arch == 'res50':
+            model = resnet50(float=float)
         elif args.arch == 'res56':
             model = resnet56_cifar(float=float)
         else:
