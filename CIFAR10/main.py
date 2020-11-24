@@ -116,6 +116,7 @@ def main():
     ]))
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=2)
     test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
+    val_loss = 0
     val_loss /= len(testloader.dataset)
     if args.evaluate:
         validate(testloader, model, criterion)
