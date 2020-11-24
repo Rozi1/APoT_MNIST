@@ -119,7 +119,7 @@ def main():
         return
     writer = SummaryWriter(comment=fdir.replace('result/', ''))
     """ Now let's take a look at some examples. We'll use the test_loader for this."""
-    examples = enumerate(test_loader)
+    examples = enumerate(testloader)
     batch_idx, (example_data, example_targets) = next(examples)
     
     import matplotlib.pyplot as plt
