@@ -33,6 +33,10 @@ parser.add_argument('-id', '--device', default='0', type=str, help='gpu device')
 parser.add_argument('--bit', default=4, type=int, help='the bit-width of the quantized network')
 
 best_prec = 0
+train_losses = []
+train_counter = []
+test_losses = []
+test_counter = []
 args = parser.parse_args()
 
 def main():
@@ -110,7 +114,7 @@ def main():
         transforms.Normalize((0.1307,), (0.3081,))
     ]))
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=2)
-
+    test_counter = [i*len(trainloader.dataset) for i in range(n_epochs + 1)]
     if args.evaluate:
         validate(testloader, model, criterion)
         model.module.show_params()
@@ -121,11 +125,7 @@ def main():
     batch_idx, (example_data, example_targets) = next(examples)
     
     
-    """ Varibales to Store correct and wrong """
-    train_losses = []
-    train_counter = []
-    test_losses = []
-    test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
+ 
    
 
    
@@ -174,6 +174,7 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
+   """ Varibales to Store correct and wrong """
 
 def train(trainloader, model, criterion, optimizer, epoch):
     batch_time = AverageMeter()
