@@ -120,17 +120,15 @@ def main():
     examples = enumerate(testloader)
     batch_idx, (example_data, example_targets) = next(examples)
     
+    
+    """ Varibales to Store correct and wrong """
+    train_losses = []
+    train_counter = []
+    test_losses = []
+    test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
    
 
-    fig = plt.figure()
-    for i in range(6):
-        plt.subplot(2,3,i+1)
-        plt.tight_layout()
-        plt.imshow(example_data[i][0], cmap='gray', interpolation='none')
-        plt.title("Ground Truth: {}".format(example_targets[i]))
-        plt.xticks([])
-        plt.yticks([])
-    fig
+   
 
     for epoch in range(args.start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch)
@@ -175,11 +173,8 @@ class AverageMeter(object):
         self.count += n
         self.avg = self.sum / self.count
 
-""" Varibales to Store correct and wrong """
-train_losses = []
-train_counter = []
-test_losses = []
-test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
+
+
 def train(trainloader, model, criterion, optimizer, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
