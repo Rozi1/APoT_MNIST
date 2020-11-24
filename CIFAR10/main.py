@@ -175,7 +175,11 @@ class AverageMeter(object):
         self.count += n
         self.avg = self.sum / self.count
 
-
+""" Varibales to Store correct and wrong """
+train_losses = []
+train_counter = []
+test_losses = []
+test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
 def train(trainloader, model, criterion, optimizer, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
@@ -208,7 +212,9 @@ def train(trainloader, model, criterion, optimizer, epoch):
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
-
+        train_losses.append(loss.item())
+        train_counter.append(
+        (i*64) + ((epoch-1)*len(trainloader.dataset)))
         # if i % 2 == 0:
         #     model.module.show_params()
         if i % args.print_freq == 0:
@@ -224,7 +230,7 @@ def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
     losses = AverageMeter()
     top1 = AverageMeter()
-
+    val_loss = 0
     # switch to evaluate mode
     model.eval()
 
@@ -245,7 +251,8 @@ def validate(val_loader, model, criterion):
             # measure elapsed time
             batch_time.update(time.time() - end)
             end = time.time()
-
+            val_loss /= len(testloader.dataset)
+            test_losses.append(val_loss)
             if i % args.print_freq == 0:
                 print('Test: [{0}/{1}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
@@ -289,6 +296,13 @@ def accuracy(output, target, topk=(1,)):
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 
+fig = plt.figure()
+plt.plot(train_counter, train_losses, color='blue')
+plt.scatter(test_counter, test_losses, color='red')
+plt.legend(['Train Loss', 'Test Loss'], loc='upper right')
+plt.xlabel('number of training examples seen')
+plt.ylabel('negative log likelihood loss')
+fig
 
 if __name__=='__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
