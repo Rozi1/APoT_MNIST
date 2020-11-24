@@ -13,7 +13,7 @@ import torchvision.transforms as transforms
 from models import *
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-%matplotlib inline
+
 parser = argparse.ArgumentParser(description='PyTorch Cifar10 Training')
 parser.add_argument('--epochs', default=5, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('-a', '--arch', metavar='ARCH', default='res50')
