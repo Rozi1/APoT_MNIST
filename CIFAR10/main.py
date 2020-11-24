@@ -174,7 +174,7 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
-   """ Varibales to Store correct and wrong """
+   
 
 def train(trainloader, model, criterion, optimizer, epoch):
     batch_time = AverageMeter()
