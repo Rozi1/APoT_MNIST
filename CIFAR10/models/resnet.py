@@ -160,49 +160,30 @@ class ResNet_Cifar(nn.Module):
 
 
 
-def resnet20_cifar(**kwargs):
-    model = ResNet_Cifar(BasicBlock, [3, 3, 3], **kwargs)
+def resnet50(pretrained=False, **kwargs):
+    """Constructs a ResNet-50 model.
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+    """
+    model = ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
+    if pretrained:
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
     return model
-
-
-def resnet32_cifar(**kwargs):
-    model = ResNet_Cifar(BasicBlock, [5, 5, 5], **kwargs)
-    return model
-
-
-def resnet44_cifar(**kwargs):
-    model = ResNet_Cifar(BasicBlock, [7, 7, 7], **kwargs)
-    return model
-
-
-def resnet56_cifar(**kwargs):
-    model = ResNet_Cifar(BasicBlock, [9, 9, 9], **kwargs)
-    return model
-
-
-def resnet110_cifar(**kwargs):
-    model = ResNet_Cifar(BasicBlock, [18, 18, 18], **kwargs)
-    return model
-
-
-def resnet1202_cifar(**kwargs):
-    model = ResNet_Cifar(BasicBlock, [200, 200, 200], **kwargs)
-    return model
-
-
-def resnet164_cifar(**kwargs):
-    model = ResNet_Cifar(Bottleneck, [18, 18, 18], **kwargs)
-    return model
-
-
-def resnet1001_cifar(**kwargs):
-    model = ResNet_Cifar(Bottleneck, [111, 111, 111], **kwargs)
-    return model
-
 
 if __name__ == '__main__':
-    pass
-    # net = resnet20_cifar(float=True)
-    # y = net(torch.randn(1, 3, 64, 64))
-    # print(net)
-    # print(y.size())
+    import torch
+    from torchsummary import summary
+    import torch.nn as nn
+    from torchviz import make_dot
+    
+#print the layers of resnet50
+    device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model=resnet50().to(device)
+    summary(model,(1,224,224))
+    print(model)
+
+#print the architecture of resnet50
+    x = torch.randn(1,1,224,224).requires_grad_(True)
+    y = model(x.to(device))
+    vis_graph = make_dot(y,params=dict(list(model.named_parameters()) + [('x', x)] ))
+    vis_graph.view()
