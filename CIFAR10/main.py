@@ -37,6 +37,7 @@ train_losses = []
 train_counter = []
 test_losses = []
 test_counter = []
+val_loss = 0
 args = parser.parse_args()
 
 def main():
@@ -115,6 +116,7 @@ def main():
     ]))
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=2)
     test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
+    val_loss /= len(testloader.dataset)
     if args.evaluate:
         validate(testloader, model, criterion)
         model.module.show_params()
@@ -226,7 +228,7 @@ def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
     losses = AverageMeter()
     top1 = AverageMeter()
-    val_loss = 0
+    
     # switch to evaluate mode
     model.eval()
 
@@ -247,7 +249,7 @@ def validate(val_loader, model, criterion):
             # measure elapsed time
             batch_time.update(time.time() - end)
             end = time.time()
-            val_loss /= len(testloader.dataset)
+            
             test_losses.append(val_loss)
             if i % args.print_freq == 0:
                 print('Test: [{0}/{1}]\t'
