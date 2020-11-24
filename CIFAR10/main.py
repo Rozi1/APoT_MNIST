@@ -17,7 +17,7 @@ import torchvision.transforms as transforms
 from models import *
 
 parser = argparse.ArgumentParser(description='PyTorch Cifar10 Training')
-parser.add_argument('--epochs', default=300, type=int, metavar='N', help='number of total epochs to run')
+parser.add_argument('--epochs', default=5, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('-a', '--arch', metavar='ARCH', default='res50')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N', help='manual epoch number (useful on restarts)')
 parser.add_argument('-b', '--batch-size', default=128, type=int, metavar='N', help='mini-batch size (default: 128),only used for train')
@@ -114,7 +114,7 @@ def main():
         transforms.Normalize((0.1307,), (0.3081,))
     ]))
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=2)
-    test_counter = [i*len(trainloader.dataset) for i in range(n_epochs + 1)]
+    test_counter = [i*len(trainloader.dataset) for i in range(args.epochs + 1)]
     if args.evaluate:
         validate(testloader, model, criterion)
         model.module.show_params()
