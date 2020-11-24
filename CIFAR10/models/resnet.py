@@ -98,15 +98,19 @@ class ResNet_Cifar(nn.Module):
 
     def __init__(self, block, layers, num_classes=10, float=False):
         super(ResNet_Cifar, self).__init__()
-        self.inplanes = 16
-        self.conv1 = first_conv(1, 16, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(16)
+        self.inplanes = 64
+        
+        self.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3,
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
-        self.layer1 = self._make_layer(block, 16, layers[0], float=float)
-        self.layer2 = self._make_layer(block, 32, layers[1], stride=2, float=float)
-        self.layer3 = self._make_layer(block, 64, layers[2], stride=2, float=float)
-        self.avgpool = nn.AvgPool2d(8, stride=1)
-        self.fc = last_fc(64 * block.expansion, num_classes)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.layer1 = self._make_layer(block, 64, layers[0])
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
+        self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
+        self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
