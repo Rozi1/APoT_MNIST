@@ -8,7 +8,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
-
+import matplotlib.pyplot as plt
 from tensorboardX import SummaryWriter
 
 import torchvision
@@ -122,7 +122,7 @@ def main():
     examples = enumerate(testloader)
     batch_idx, (example_data, example_targets) = next(examples)
     
-    import matplotlib.pyplot as plt
+   
 
     fig = plt.figure()
     for i in range(6):
