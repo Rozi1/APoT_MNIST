@@ -118,6 +118,21 @@ def main():
         model.module.show_params()
         return
     writer = SummaryWriter(comment=fdir.replace('result/', ''))
+    """ Now let's take a look at some examples. We'll use the test_loader for this."""
+    examples = enumerate(test_loader)
+    batch_idx, (example_data, example_targets) = next(examples)
+    
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure()
+    for i in range(6):
+        plt.subplot(2,3,i+1)
+        plt.tight_layout()
+        plt.imshow(example_data[i][0], cmap='gray', interpolation='none')
+        plt.title("Ground Truth: {}".format(example_targets[i]))
+        plt.xticks([])
+        plt.yticks([])
+    fig
 
     for epoch in range(args.start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch)
