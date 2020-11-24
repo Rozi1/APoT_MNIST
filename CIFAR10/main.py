@@ -45,7 +45,7 @@ def main():
     if use_gpu:
         float = True if args.bit == 32 else False
         if args.arch == 'res50':
-            model = resnet50()
+            model = resnet50(float=float)
         elif args.arch == 'res56':
             model = resnet56_cifar(float=float)
         else:
@@ -91,26 +91,24 @@ def main():
 
     print('=> loading MNIST data...')
     normalize = transforms.Normalize(mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262])
-    train_dataset = torchvision.datasets.MNIST(
+    train_dataset = torchvision.datasets.FashionMNIST(
         root='./data',
         train=True,
         download=True,
-        transform=torchvision.transforms.Compose([
-                               torchvision.transforms.ToTensor(),
-                               torchvision.transforms.Normalize(
-                                 (0.1307,), (0.3081,))
-                             ]))
+        transform=transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,))
+    ]))
     trainloader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
-    test_dataset = torchvision.datasets.MNIST(
+    test_dataset = torchvision.datasets.FashionMNIST(
         root='./data',
         train=False,
         download=True,
-        transform=torchvision.transforms.Compose([
-                               torchvision.transforms.ToTensor(),
-                               torchvision.transforms.Normalize(
-                                 (0.1307,), (0.3081,))
-                             ]))
+        transform=transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,))
+    ]))
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=2)
 
     if args.evaluate:
