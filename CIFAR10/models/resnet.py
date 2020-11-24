@@ -118,7 +118,7 @@ class ResNet(nn.Module):
                m.weight.data.fill_(1)
                m.bias.data.zero_()
 
-    def _make_layer(self, block, planes, blocks, stride=1, float=False):
+    def _make_layer(self, block, planes, blocks, stride=1):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
             downsample = nn.Sequential(
@@ -129,7 +129,7 @@ class ResNet(nn.Module):
             )
 
         layers = []
-        layers.append(block(self.inplanes, planes, stride, downsample, float=float))
+        layers.append(block(self.inplanes, planes, stride, downsample))
         self.inplanes = planes * block.expansion
         for _ in range(1, blocks):
             layers.append(block(self.inplanes, planes, float=float))
