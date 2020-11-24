@@ -93,13 +93,11 @@ class Bottleneck(nn.Module):
 
         return out
 
+class ResNet(nn.Module):
 
-class ResNet_Cifar(nn.Module):
-
-    def __init__(self, block, layers, num_classes=10, float=False):
-        super(ResNet_Cifar, self).__init__()
+    def __init__(self, block, layers, num_classes=1000, zero_init_residual=False):
+        super(ResNet, self).__init__()
         self.inplanes = 64
-        
         self.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3,
                                bias=False)
         self.bn1 = nn.BatchNorm2d(64)
@@ -113,12 +111,12 @@ class ResNet_Cifar(nn.Module):
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
-            elif isinstance(m, nn.BatchNorm2d):
-                m.weight.data.fill_(1)
-                m.bias.data.zero_()
+           if isinstance(m, nn.Conv2d):
+               n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+               m.weight.data.normal_(0, math.sqrt(2. / n))
+           elif isinstance(m, nn.BatchNorm2d):
+               m.weight.data.fill_(1)
+               m.bias.data.zero_()
 
     def _make_layer(self, block, planes, blocks, stride=1, float=False):
         downsample = None
@@ -157,7 +155,6 @@ class ResNet_Cifar(nn.Module):
         for m in self.modules():
             if isinstance(m, QuantConv2d):
                 m.show_params()
-
 
 
 def resnet50(pretrained=False, **kwargs):
